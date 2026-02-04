@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemutar Video Sederhana</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .controls button {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .controls button:hover {
+            background-color: #555;
+        }
+
+        #nextButton {
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            left: 90%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #nextButton:hover {
+            background-color: #367C39;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="myVideo" controls>
+            <source src="lv_7214801012790463746_20260201010458.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="controls">
+            <button id="playPauseBtn">Play</button>
+            <button id="replayBtn">Replay</button>
+            <button onclick="window.location.href='kado.html'">kembali</button>
+        </div>
+        <button id="nextButton">Next</button>
+    </div>
+
+    <script>
+        var video = document.getElementById('myVideo');
+        var playPauseBtn = document.getElementById('playPauseBtn');
+        var replayBtn = document.getElementById('replayBtn');
+        var nextButton = document.getElementById('nextButton');
+
+        playPauseBtn.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = 'Pause';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = 'Play';
+            }
+        });
+
+        replayBtn.addEventListener('click', function() {
+            video.currentTime = 0;
+            video.play();
+            playPauseBtn.textContent = 'Pause';
+            nextButton.style.display = 'none'; // Sembunyikan tombol Next saat replay
+        });
+
+        video.addEventListener('ended', function() {
+            nextButton.style.display = 'block';
+            playPauseBtn.textContent = 'Play';
+        });
+
+        nextButton.addEventListener('click', function() {
+            // Tambahkan logika untuk memuat video berikutnya di sini
+            alert('Memuat video berikutnya...');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kado Spesial Untukmu</title>
+    <style>
+        :root { --p: #ff85a1; --p-dark: #fb6f92; }
+        body { 
+            background: #ffe5ec; margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            font-family: 'Poppins', sans-serif; perspective: 1000px;
+            overflow: hidden;
+        }
+
+        h1 { color: var(--p-dark); margin-top: 40px; text-shadow: 2px 2px white; text-align: center; }
+
+        .gift-container { display: flex; gap: 80px; margin-top: 100px; z-index: 10; }
+
+        /* Struktur Kotak 3D */
+        .gift-3d {
+            width: 120px; height: 120px; position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateY(20deg);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .gift-3d:hover { transform: rotateX(-20deg) rotateY(160deg); }
+
+        .side {
+            position: absolute; width: 120px; height: 120px;
+            background: var(--p); border: 2px solid var(--p-dark);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 14px;
+        }
+        .front  { transform: translateZ(60px); }
+        .back   { transform: rotateY(180deg) translateZ(60px); background: #ffc2d1; color: var(--p-dark); }
+        .left   { transform: rotateY(-90deg) translateZ(60px); }
+        .right  { transform: rotateY(90deg) translateZ(60px); }
+        .top    { transform: rotateX(90deg) translateZ(60px); background: var(--p-dark); }
+        .bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+        .v-rib { position: absolute; width: 25px; height: 100%; background: #ff0054; left: 47.5px; z-index: 5; }
+
+        /* TOMBOL END (Sembunyi di awal) */
+        #endBtn {
+            position: absolute; 
+            bottom: 50px;
+            width: 180px; height: 50px;
+            background: #ff4d6d; color: white; border: none;
+            border-radius: 12px; font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            transition: left 0.15s ease, top 0.15s ease, opacity 0.5s;
+            z-index: 1000;
+            display: none; /* Sembunyi */
+            opacity: 0;
+        }
+
+        .counter {
+            position: fixed; top: 20px; left: 20px;
+            background: white; color: var(--p-dark);
+            padding: 10px 20px; border-radius: 30px; 
+            font-weight: bold; border: 2px solid var(--p-dark);
+            display: none; /* Sembunyi juga counter-nya */
+        }
+    </style>
+</head>
+<body onclick="playMusic()">
+
+    <div class="counter" id="counterUI"><span id="count"></span></div>
+    <h1 id="mainTitle">Buka Kedua Kado di Bawah! 🎁</h1>
+
+    <audio id="bgMusic" loop>
+        <source src="meskidibibirini.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="gift-container">
+        <div class="gift-3d" onclick="openGift('video')">
+            <div class="side front"><div class="v-rib"></div>KADO A</div>
+            <div class="side back">VIDEO 🎬</div>
+            <div class="side top"></div><div class="side left"></div><div class="side right"></div><div class="side bottom"></div>
+        </div>
+
+        <div class="gift-3d" onclick="openGift('game')">
+            <div class="side front"><div class="v-rib"></div>KADO B</div>
+            <div class="side back">GAME 🎮</div>
+            <div class="side top"></div><div class="side left"></div><div class="side right"></div><div class="side bottom"></div>
+        </div>
+    </div>
+
+    <button id="endBtn">End</button>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const btn = document.getElementById('endBtn');
+        const countDisplay = document.getElementById('count');
+        const counterUI = document.getElementById('counterUI');
+        let count = 0;
+
+        function playMusic() { music.play().catch(() => {}); }
+
+        // Fungsi saat kado diklik
+        function openGift(type) {
+            // Tandai kado sebagai sudah dibuka
+            localStorage.setItem(type, 'opened');
+            
+            // Pindah halaman
+            if(type === 'video') window.location.href = 'video.html';
+            if(type === 'game') window.location.href = 'game.html';
+        }
+
+        // Cek apakah kedua kado sudah pernah dibuka
+        window.onload = function() {
+            const videoOpened = localStorage.getItem('video');
+            const gameOpened = localStorage.getItem('game');
+
+            if (videoOpened && gameOpened) {
+                // Munculkan Tombol End dan Counter
+                btn.style.display = 'block';
+                setTimeout(() => { btn.style.opacity = '1'; }, 10);
+                counterUI.style.display = 'block';
+                document.getElementById('mainTitle').innerText = "Wah, Semua Kado Terbuka! Sekarang Coba Klik 'End' 😜";
+            }
+        };
+
+        // Logika Menghindar 17 Kali
+        btn.addEventListener('mouseover', () => {
+            if (count < 20) {
+                const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+                count++;
+                countDisplay.innerText = 20 - count;
+
+                if (count === 20) {
+                    btn.style.background = "#2b9348";
+                    btn.innerText = "Klik iniii sayanggg ❤️";
+                }
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (count >= 20) {
+                // Reset data agar bisa diulang dari awal jika mau
+                localStorage.clear();
+                window.location.href = 'end.html';
+            }
+        });
+    </script>
+</body>
+</html>

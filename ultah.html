@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Sayangku</title>
+    <style>
+        /* CSS AREA */
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fff5f7; /* Pink sangat muda */
+            color: #4a2c2a;
+            overflow: hidden;
+        }
+
+        /* Layar Animasi Awal */
+        #animation-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 1s ease;
+        }
+
+        #typewriter-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            border-right: 2px solid #ff4757;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            color: #ff4757;
+        }
+
+        /* Halaman Ucapan Utama */
+        #main-content {
+            display: none;
+            height: 100vh;
+            padding: 40px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4);
+            max-width: 350px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ff4757;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .heart {
+            color: #ff4757;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Tombol Next Kanan Bawah */
+        .btn-next {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 25px;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="animation-screen">
+        <h1 id="typewriter-text"></h1>
+    </div>
+
+    <div id="main-content">
+        <div class="card">
+            <div class="heart">❤️</div>
+            <h1>Happy Birthday Firda!</h1>
+            <p>Selamat ulang tahun untuk orang paling spesial di hidupku. Semoga semua yangg kamu impikann tercapai dan kita selalu bersama selamanya Aamiin. I love you ayanggg!</p>
+        </div>
+        
+        <button class="btn-next" onclick="tanyaPindah()">Next</button>
+    </div>
+
+    <script>
+        // JAVASCRIPT AREA
+
+        // 1. Fungsi Animasi Mengetik
+        const text = "Happy Birthday Sayangku...";
+        let i = 0;
+
+        function startTypewriter() {
+            const element = document.getElementById("typewriter-text");
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                element.style.width = "auto";
+                i++;
+                setTimeout(startTypewriter, 100);
+            } else {
+                // Selesai mengetik, tunggu 1.5 detik lalu pindah halaman
+                setTimeout(transitionToMain, 1500);
+            }
+        }
+
+        // 2. Fungsi Transisi Halaman
+        function transitionToMain() {
+            const animScreen = document.getElementById("animation-screen");
+            const mainContent = document.getElementById("main-content");
+
+            animScreen.style.opacity = "0";
+            
+            setTimeout(() => {
+                animScreen.style.display = "none";
+                mainContent.style.display = "flex";
+                // Trigger fade in untuk konten utama
+                setTimeout(() => {
+                    mainContent.style.opacity = "1";
+                }, 50);
+            }, 1000);
+        }
+
+        // 3. Fungsi Tombol Next (Konfirmasi)
+        function tanyaPindah() {
+            let pilihan = confirm("Iya pindah halaman atau tidak tetap di sini?");
+            if (pilihan) {
+                window.location.href = "ucapan.html"; // Ganti URL ini
+            }
+        }
+
+        // Jalankan saat browser selesai memuat
+        window.onload = startTypewriter;
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tangkap Cinta - Skor 17</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: #ffafcc; 
+            font-family: 'Arial', sans-serif; 
+            text-align: center; 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ui { 
+            color: white; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); 
+            margin-top: 10px; 
+            z-index: 10;
+        }
+        canvas { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+        #nextBtn {
+            display: none; 
+            padding: 15px 40px; 
+            font-size: 20px; 
+            background: #fb6f92;
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(251, 111, 146, 0.4); 
+            margin-top: 20px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="gameMusic" loop>
+        <source src="Rizky Febian - Hingga Tua Bersama Lirik.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="ui">
+        <h1>Tangkap 17 hatii ayyyy ❤️</h1>
+        <h2>Skor: <span id="score">0</span> / 17</h2>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    
+    <button id="nextBtn" onclick="nextPage()">Lanjut Sayang →</button>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const nextBtn = document.getElementById('nextBtn');
+        const music = document.getElementById('gameMusic');
+
+        window.addEventListener('load', () => {
+            music.play().catch(() => {
+                console.log("Menunggu interaksi untuk memutar musik...");
+            });
+        });
+
+        canvas.width = 350; 
+        canvas.height = 400;
+        let score = 0;
+        let hearts = [];
+
+        function createHeart() {
+            return { 
+                x: Math.random() * (canvas.width - 40), 
+                y: -50, 
+                size: 35, 
+                speed: 2 + Math.random() * 3 
+            };
+        }
+
+        function drawHeart(x, y, size) {
+            ctx.font = size + "px Arial";
+            ctx.fillText("❤️", x, y);
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (music.paused && score > 0) music.play();
+
+            // Munculkan hati (peluang sedikit diperbesar agar lebih seru)
+            if (score < 17 && Math.random() < 0.05) {
+                hearts.push(createHeart());
+            }
+
+            hearts.forEach((h, i) => {
+                h.y += h.speed;
+                drawHeart(h.x, h.y, h.size);
+                if (h.y > canvas.height) hearts.splice(i, 1);
+            });
+
+            // LOGIKA SKOR DIUBAH JADI 17
+            if (score >= 17) {
+                ctx.fillStyle = "#fb6f92";
+                ctx.font = "bold 24px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("17 Cinta Tertangkap! 🎉", canvas.width/2, canvas.height/2);
+                nextBtn.style.display = "inline-block";
+                
+                // Hapus sisa hati agar layar bersih
+                hearts = []; 
+            } else {
+                requestAnimationFrame(update);
+            }
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const r = canvas.getBoundingClientRect();
+            const mx = e.clientX - r.left;
+            const my = e.clientY - r.top;
+
+            hearts.forEach((h, i) => {
+                if (mx > h.x && mx < h.x + h.size && my > h.y - h.size && my < h.y) {
+                    hearts.splice(i, 1);
+                    score++;
+                    scoreEl.innerText = score;
+                }
+            });
+        });
+
+        function nextPage() {
+            window.location.href = "game2.html"; 
+        }
+
+        update();
+    </script>
+</body>
+</html>

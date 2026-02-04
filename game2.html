@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Berbahaya: Kejar Cintaku! 🏃‍♂️💨</title>
+    <style>
+        :root { --pink: #ff4d6d; --bg: #fff0f3; }
+        body { 
+            margin: 0; background: var(--bg); font-family: 'Poppins', sans-serif; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            height: 100vh; overflow: hidden; touch-action: none;
+        }
+
+        #start-screen {
+            position: fixed; inset: 0; background: var(--pink); z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; text-align: center; padding: 20px;
+        }
+
+        #arena {
+            width: 90vw; height: 70vh; background: white; border: 5px solid var(--pink);
+            border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: crosshair;
+        }
+
+        .actor { position: absolute; font-size: 35px; user-select: none; z-index: 10; }
+        .obstacle { z-index: 50; pointer-events: auto; }
+        
+        .ui-top { display: flex; gap: 30px; font-size: 20px; font-weight: bold; color: var(--pink); margin-bottom: 10px; }
+
+        /* Tombol Next yang akan muncul saat menang */
+        #nextBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 35px;
+            background: #2b9348;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none; /* Sembunyi dulu */
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(43, 147, 72, 0.4);
+            z-index: 200;
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .win-overlay {
+            position: absolute; inset: 0; background: rgba(255, 255, 255, 0.8);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 150; color: var(--pink); text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>MISI SULIT! ⚠️</h1>
+        <p>Tangkap aku (😎) 5x untuk menang.<br><b>AWAS!</b> Jangan sentuh Hantu (👻)!</p>
+        <button onclick="startGame()" style="padding: 15px 40px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; background: white; color: var(--pink); margin-top: 20px;">
+            MULAI KEJAR!
+        </button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="meskidibibirini.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="ui-top">
+        <div>❤️ Skor: <span id="count">0</span>/5</div>
+        <div>⏱️ Waktu: <span id="timer">30</span>s</div>
+    </div>
+
+    <div id="arena">
+        <div id="target" class="actor" style="cursor:pointer;">😎</div>
+        <div id="win-message" class="win-overlay">
+            <h1>BERHASIL! 🎉</h1>
+            <p>Kamu memang pemenang hatiku.<br>Klik tombol di bawah!</p>
+        </div>
+    </div>
+
+    <button id="nextBtn" onclick="window.location.href='kadotml'">Next ➔</button>
+
+    <script>
+        const arena = document.getElementById('arena');
+        const target = document.getElementById('target');
+        const music = document.getElementById('bgMusic');
+        const nextBtn = document.getElementById('nextBtn');
+        const winMessage = document.getElementById('win-message');
+        
+        let score = 0;
+        let timeLeft = 30;
+        let gameActive = false;
+        let targetPos = { x: 100, y: 100 };
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            music.play();
+            gameActive = true;
+            spawnGhosts();
+            startTimer();
+            moveTarget();
+        }
+
+        function startTimer() {
+            let timerInterval = setInterval(() => {
+                if(!gameActive) { clearInterval(timerInterval); return; }
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) gameOver("Waktu habis! Sayang kurang cepat nih 😜");
+            }, 1000);
+        }
+
+        arena.addEventListener('mousemove', (e) => {
+            if(!gameActive) return;
+            const rect = arena.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Target Kabur
+            const dist = Math.hypot(mouseX - targetPos.x, mouseY - targetPos.y);
+            if (dist < 130) {
+                targetPos.x += (targetPos.x - mouseX) * 0.3;
+                targetPos.y += (targetPos.y - mouseY) * 0.3;
+                targetPos.x = Math.max(20, Math.min(rect.width - 50, targetPos.x));
+                targetPos.y = Math.max(20, Math.min(rect.height - 50, targetPos.y));
+                target.style.left = targetPos.x + 'px';
+                target.style.top = targetPos.y + 'px';
+            }
+
+            // Cek Tabrakan Hantu
+            document.querySelectorAll('.obstacle').forEach(ghost => {
+                const gDist = Math.hypot(mouseX - parseFloat(ghost.style.left), mouseY - parseFloat(ghost.style.top));
+                if(gDist < 30) gameOver("Ups! Kamu kena racun hantu 👻 Coba lagi!");
+            });
+        });
+
+        target.addEventListener('mousedown', () => {
+            if(!gameActive) return;
+            score++;
+            document.getElementById('count').innerText = score;
+            target.innerText = "❤️";
+            
+            if(score >= 5) {
+                gameWin();
+            } else {
+                setTimeout(() => {
+                    target.innerText = "😎";
+                    targetPos = { x: Math.random() * (arena.clientWidth - 60), y: Math.random() * (arena.clientHeight - 60) };
+                    moveTarget();
+                }, 200);
+            }
+        });
+
+        function gameWin() {
+            gameActive = false;
+            winMessage.style.display = 'flex';
+            nextBtn.style.display = 'block'; // Tampilkan tombol Next
+            music.pause(); // Opsional: matikan musik atau ganti lagu
+        }
+
+        function spawnGhosts() {
+            for(let i=0; i<5; i++) {
+                const ghost = document.createElement('div');
+                ghost.className = 'actor obstacle';
+                ghost.innerText = '👻';
+                arena.appendChild(ghost);
+                let x = Math.random() * (arena.clientWidth - 40), y = Math.random() * (arena.clientHeight - 40);
+                let dx = (Math.random() - 0.5) * 7, dy = (Math.random() - 0.5) * 7;
+
+                function moveGhost() {
+                    if(!gameActive && score < 5) return;
+                    if(score >= 5) { ghost.remove(); return; }
+                    x += dx; y += dy;
+                    if(x <= 0 || x >= arena.clientWidth - 40) dx *= -1;
+                    if(y <= 0 || y >= arena.clientHeight - 40) dy *= -1;
+                    ghost.style.left = x + 'px'; ghost.style.top = y + 'px';
+                    requestAnimationFrame(moveGhost);
+                }
+                moveGhost();
+            }
+        }
+
+        function moveTarget() {
+            target.style.left = targetPos.x + 'px';
+            target.style.top = targetPos.y + 'px';
+        }
+
+        function gameOver(msg) {
+            gameActive = false;
+            alert(msg);
+            location.reload();
+        }
+    </script>
+</body>
+</html>

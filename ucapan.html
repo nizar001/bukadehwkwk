@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sayang!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-image: url(love.jfif);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 50px;
+            width: 85%;
+            max-width: 600px;
+        }
+        .photo-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+            cursor: pointer;
+        }
+       .photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-image: url('a.jpeg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            color: #777;
+            line-height: 1.6;
+        }
+        .love-button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .love-button:before {
+            content: '\2665'; /* Heart symbol */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .love-button:hover {
+            background-color: #d81b60;
+        }
+        .love-button:hover:before {
+            opacity: 1;
+        }
+        .love-button.active {
+            box-shadow: 0 0 20px #ff4081; /* Pink glow */
+        }
+        audio {
+            display: none;
+        }
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="photo">
+        </div>
+        <h1>Selamat Ulang Tahun, Sayang!</h1>
+        <p>  <div class="container">
+        <div class="photo"></div>
+        <h1>Selamat Ulang Tahun, Sayang!</h1>
+        <p>haiii sayangg!!!
+Happy birthday yaaa ayangggg! ndakkk kerasaa yaaa, udaa harii spesial kamuu hehhee
+Kamuu ituu baik, perhatian, pengertian, dan selalu bikin aku ketawa. Nggak ada hari yang ngebosenin kalo ada kamu diii hatii akuuuu.
+makasiww yaa ayyy udah jadi bagian dari hidupkuu. Makasih udah nemenin aku di saat susah maupun senangg hehhee. Makasih udah selalu support aku dan percaya sama akuuu.
+semogaaa di ulang tahun kamu inii, semua yang kamu impikan bisa jadi kenyataann yahhh sayaanggg.Dan yang paling penting, semoga kamu selalu bahagiaaa samaa akuuu hehehe. Karena kebahagiaan kamuww itu juga kebahagiaan akuuuwww.
+oouuu iyaaa, jangan lupa juga buat selalu jaga kesehatan yaaaa ayy. Jangan terlalu kecapean yahhh.jangan sampe sakit yaahh ayyyy.
+Sekaliii lagiii, happy birthday sayangkuu cintakuuuu future my wife!.</p><br>I LOVE YOU</p>🩶
+    </div></p>
+        <button class="love-button" onclick="goToNextPage(this)">Next</button>
+        <audio id="birthdaySong" src="msk1.mp3" preload="auto"></audio>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const birthdaySong = document.getElementById('birthdaySong');
+            birthdaySong.play();
+        });
+
+        function goToNextPage(button) {
+            button.classList.add('active');
+            setTimeout(function() {
+                window.location.href = 'musik.html';
+            }, 500);
+        }
+
+        function changeProfilePicture(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const photoContainer = document.querySelector('.photo-container::before');
+                    photoContainer.style.backgroundImage = `url('${e.target.result}')`;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

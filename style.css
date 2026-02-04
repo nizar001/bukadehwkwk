@@ -1,0 +1,89 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(rm171-aew-05.jpg);
+    color: rgb(255, 2, 78);
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px; /* Ukuran standar lebar HP */
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Search Bar Mobile */
+.search-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 30px;
+}
+
+input {
+    flex: 2;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    flex: 1;
+    border-radius: 10px;
+    background-color: #1db954;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+/* List Musik Menurun (Portrait) */
+.music-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Satu kolom agar lebar di HP */
+    gap: 15px;
+    padding-bottom: 80px; /* Jarak agar tidak tertutup tombol next */
+}
+
+.music-item {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.music-item p {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+audio {
+    width: 100%;
+    height: 35px;
+    filter: invert(100%);
+}
+
+/* Tombol Next Kanan Bawah */
+.btn-next {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background-color: #ffffff;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 100;
+}

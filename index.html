@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masukan PIN nya ayyy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-color: #e9ecef;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); /* Initial pink shadow */
+            animation: rgbShadow 5s infinite; /* RGB shadow animation */
+        }
+        @keyframes rgbShadow {
+            0% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); } /* Pink */
+            25% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); } /* Cyan */
+            50% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.5); } /* Yellow */
+            75% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); } /* Green */
+            100% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.5); } /* Pink */
+        }
+        .avatar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        h2 {
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        p.greeting {
+            color: #6c757d;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+        #pinInput {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 0.2rem;
+        }
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .key {
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .key:hover {
+            background-color: #e9ecef;
+        }
+        .key:active {
+            background-color: #ff4081; /* Pink when clicked */
+            color: white;
+        }
+        .error {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        #submitButton {
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            transition: background-color 0.2s;
+        }
+        #submitButton:hover {
+            background-color: #218838;
+        }
+        #submitButton:active {
+            background-color: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar">
+            <img src="f.jpeg" alt="Foto Profil">
+        </div>
+        <h2>Happy Birthday Sayang!</h2>
+        <p class="greeting">Masukin PIN nya sayangkkuhh</p>
+        <input type="password" id="pinInput" maxlength="8" readonly>
+        <div class="keyboard">
+            <button class="key" onclick="appendPin('1')">1</button>
+            <button class="key" onclick="appendPin('2')">2</button>
+            <button class="key" onclick="appendPin('3')">3</button>
+            <button class="key" onclick="appendPin('4')">4</button>
+            <button class="key" onclick="appendPin('5')">5</button>
+            <button class="key" onclick="appendPin('6')">6</button>
+            <button class="key" onclick="appendPin('7')">7</button>
+            <button class="key" onclick="appendPin('8')">8</button>
+            <button class="key" onclick="appendPin('9')">9</button>
+            <button class="key" onclick="appendPin('')"></button>
+            <button class="key" onclick="appendPin('0')">0</button>
+            <button class="key" onclick="backspace()">&lt;</button>
+        </div>
+        <button id="submitButton" onclick="validatePin()">Verifikasi PIN</button>
+        <audio id="birthdaySong" src="msk2.mp3" preload="auto"></audio>
+        <p class="error" id="errorText"></p>
+    </div>
+
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const birthdaySong = document.getElementById('birthdaySong');
+            birthdaySong.play();
+        });
+        const correctPin = "02052009";
+        const pinInput = document.getElementById("pinInput");
+        const errorText = document.getElementById("errorText");
+
+        function appendPin(number) {
+            if (pinInput.value.length < 8) {
+                pinInput.value += number;
+            }
+        }
+
+        function backspace() {
+            pinInput.value = pinInput.value.slice(0, -1);
+        }
+
+        function validatePin() {
+            const pin = pinInput.value;
+
+            if (pin === correctPin) {
+                window.location.href = "ultah.html";
+            } else {
+                errorText.textContent = "PIN salah. Silakan coba lagi.";
+            }
+        }
+    </script>
+</body>
+</html>
